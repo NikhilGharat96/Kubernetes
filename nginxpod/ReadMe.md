@@ -21,3 +21,6 @@ Pod :  A Pod is the smallest and most basic deployable unit in Kubernetes.
 
 6. To delete the pod :
         command :-  kubectl delete pod nginxpod
+
+7. To get the terminal of pod or entering in the pod :
+         command :- kubectl exec -it nginxpod -- /bin/bash
