@@ -1,0 +1,8 @@
+# Get cluster information
+kubectl cluster-info
+
+# List all nodes
+kubectl get nodes
+
+# Get detailed information about a node
+kubectl describe node <node-name>
