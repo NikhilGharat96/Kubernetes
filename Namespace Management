@@ -1,0 +1,11 @@
+# List all namespaces
+kubectl get namespaces
+
+# Create a namespace
+kubectl create namespace <namespace-name>
+
+# Delete a namespace
+kubectl delete namespace <namespace-name>
+
+# Switch to a different namespace
+kubectl config set-context --current --namespace=<namespace-name>
