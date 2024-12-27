@@ -1,0 +1,76 @@
+  //******** IMPORTANT KUBERNETES COMMANDS ***********//
+
+     *** KUBERNETES INSTALLATION SETUP ***
+
+
+---> First you have to launch two instances one is for the Master node and second is for the worker node.
+
+     for the master node take (t2.small or t2.medium )instance type and for worker node take (t2.micro or you take any.)
+   
+     After the launching instances follow the followings:
+
+
+       
+--->  A. (Run this all commands on both nodes i.e.master as well as worker node)
+
+
+1.  sudo apt-get update –y
+
+2.  sudo apt-get install docker.io –y
+
+3.  sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
+
+4.  sudo mkdir -p /etc/apt/keyrings
+
+5.  curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+6.  sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+7.  echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+8.  sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
+
+9.  sudo apt-get update
+
+10. sudo apt-get install -y kubectl kubeadm kubelet
+
+
+
+--->  B. (Run this all commands On Master node Only.)
+
+  sudo kubeadm init --ignore-preflight-errors=all
+
+  mkdir -p $HOME/.kube
+
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+  kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/calico.yaml
+
+  kubeadm token create --print-join-command
+ 
+    [*** Add port 6443 in Security group of both master and worker node ***] 
+
+After complete this all   
+
+     
+--->  C. ( On Worker node ):
+
+  Use kubeadm join command with token (copy the command from master and paste on worker, Use sudo before command.)
+  after you run join command on worker node the master and worker nodes are linked.
+
+ example of kubeadm join command:
+     --->  sudo kubeadm join 172.31.31.236:6443 --token goio0w.rod1ju8y8vvp9n59 --discovery-token-ca-cert-hash sha256:6e8b2d1e871fe84901c3d30a989067e0591b9084c35c15db9875cf094ec36f7e
+
+
+---> D. ( On Master node ):
+ 
+  after run join command on worker node go in the master node terminal
+
+and run  [ kubectl get nodes ] after fire this command and you see :
+
+                                         root@ip-172-31-31-236:/home/ubuntu# kubectl get node
+                                         NAME               STATUS   ROLES           AGE   VERSION
+                                         ip-172-31-31-236   Ready    control-plane   10d   v1.30.7     ............ this is your master node 
+                                         ip-172-31-92-141   Ready    <none>          10d   v1.30.7     ............ this is your worker node 
